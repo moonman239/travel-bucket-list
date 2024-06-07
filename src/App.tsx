@@ -1,26 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from "react";
+export default function App()
+{
+  const handleSubmit = async (e: React.FormEvent) => {
+    alert("submission");
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+        <h1>Travel Bucket List</h1>
+        <form id="locationForm" onSubmit={handleSubmit}>
+            <input type="text" id="locationInput" placeholder="Enter location" required />
+            <button type="submit">Add Location</button>
+        </form>
+        <ul id="bucketList"></ul>
     </div>
   );
 }
-
-export default App;
