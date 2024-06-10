@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/travel-bucket-list/static/css/main.1f286a7d.css",
+    "main.js": "/travel-bucket-list/static/js/main.dde89304.js",
+    "static/js/453.2376145a.chunk.js": "/travel-bucket-list/static/js/453.2376145a.chunk.js",
+    "index.html": "/travel-bucket-list/index.html",
+    "main.1f286a7d.css.map": "/travel-bucket-list/static/css/main.1f286a7d.css.map",
+    "main.dde89304.js.map": "/travel-bucket-list/static/js/main.dde89304.js.map",
+    "453.2376145a.chunk.js.map": "/travel-bucket-list/static/js/453.2376145a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1f286a7d.css",
+    "static/js/main.dde89304.js"
+  ]
+}
