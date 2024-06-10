@@ -5,12 +5,12 @@ import { Marker } from "react-leaflet";
 import { Popup,TileLayer } from "react-leaflet";
 import "./App.css";
 
-type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{name:string}};
+type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{geocoding:{name?:string,label:string}}};
 type OpenStreetMapResponse = {features: OpenStreetMapFeature[]};
 export default function App()
 {
   const [locationName,setLocationName] = React.useState<string>("");
-  const [locations, setLocations] = React.useState<{name: string,latitude:number,longitude:number}[]>([]); // [1]
+  const [locations, setLocations] = React.useState<{name?: string,label:string,latitude:number,longitude:number}[]>([]); // [1]
   const [locationVisited,setLocationVisited] = React.useState<boolean[]>([]); // [2
   useEffect(() => {
     const locations = localStorage.getItem("locations");
@@ -27,7 +27,7 @@ export default function App()
       const lat = feature.geometry.coordinates[1];
       const lon = feature.geometry.coordinates[0];
       console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-      setLocations([...locations, {name: locationName, latitude: lat, longitude: lon}]);
+      setLocations([...locations, {label: feature.properties.geocoding.label, name: feature.properties.geocoding.name, latitude: lat, longitude: lon}]);
     localStorage.setItem("locations", JSON.stringify(locations));
   }
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,7 +50,7 @@ e.preventDefault();
     setLocationName(e.target.value);
   };
   const handleFeatureSelect = (feature: OpenStreetMapFeature) => {
-    setLocationName(feature.properties.name);
+    setLocationName(feature.properties.geocoding.label);
     addFeature(feature);
     setFeatures([]);
   }
@@ -66,7 +66,7 @@ e.preventDefault();
         <div className="location-results">
                     {features.map((feature, index) => (
                         <div key={index} className="location-result" onClick={() => handleFeatureSelect(feature)}>
-                            {feature.properties.name}
+                            {feature.properties.geocoding.name}
                         </div>
                     ))}
                 </div>
