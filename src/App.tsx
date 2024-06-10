@@ -4,7 +4,7 @@ import { MapContainer } from 'react-leaflet';
 import { Marker } from "react-leaflet";
 import { Popup,TileLayer } from "react-leaflet";
 import "./App.css";
-
+import './leafletIcons';  // Ensure this import is correct
 type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{geocoding:{name?:string,label:string}}};
 type OpenStreetMapResponse = {features: OpenStreetMapFeature[]};
 export default function App()
