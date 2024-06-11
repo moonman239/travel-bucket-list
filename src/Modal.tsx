@@ -1,7 +1,7 @@
 import * as React from "react"
 import Location from "./Location";
 import "./Modal.css";
-export default function Modal(props: {locations: Location[], onClose?: () => void})
+export default function Modal(props: {locations: Location[], onClose: () => void, onConfirm: (locations: Location[]) => void})
 {
     return (
     <div id="modal" className="modal">
@@ -17,6 +17,13 @@ export default function Modal(props: {locations: Location[], onClose?: () => voi
                     </li>
                 ))}
             </ul>
+            <button onClick={() => {
+                const visitedLocations = props.locations.filter((location, index) => {
+                    const checkbox = document.getElementById(`location${index}`) as HTMLInputElement;
+                    return checkbox.checked;
+                });
+                props.onConfirm(visitedLocations);
+            }}>Confirm</button>
         </div>
     </div>
 );

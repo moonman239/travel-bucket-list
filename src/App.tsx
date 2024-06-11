@@ -8,6 +8,7 @@ import './leafletIcons';  // Ensure this import is correct
 import Location from "./Location";
 import useGetPossibleVisitedLocations from "./PossibleVisitedLocations";
 import Modal from "./Modal";
+import { setDefaultResultOrder } from "dns";
 type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{geocoding:{name?:string,label:string}}};
 type OpenStreetMapResponse = {features: OpenStreetMapFeature[]};
 
@@ -64,9 +65,15 @@ e.preventDefault();
     setFeatures([]);
   }
   console.log(`api features: ${JSON.stringify(features)}`)
+  const handleModalConfirm = (visitedLocations: Location[]) => {
+    setDisableModel(true);
+    // set locationVisited
+    const newLocationVisited = locations.map((location) => visitedLocations.some((visitedLocation) => visitedLocation.name === location.name));
+    setLocationVisited(newLocationVisited);
+};
   if (possibleVisitedLocations.length > 0 && !disableModal)
     return (
-<Modal locations={possibleVisitedLocations} onClose={() =>setDisableModel(true)} />
+<Modal locations={possibleVisitedLocations} onClose={() =>setDisableModel(true)} onConfirm={handleModalConfirm}/>
     );
   return (
  <div className="container">
