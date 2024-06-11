@@ -6,7 +6,8 @@ import { Popup,TileLayer } from "react-leaflet";
 import "./App.css";
 import './leafletIcons';  // Ensure this import is correct
 import Location from "./Location";
-import useModal from "./Modal";
+import useGetPossibleVisitedLocations from "./PossibleVisitedLocations";
+import Modal from "./Modal";
 type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{geocoding:{name?:string,label:string}}};
 type OpenStreetMapResponse = {features: OpenStreetMapFeature[]};
 
@@ -15,9 +16,10 @@ export default function App()
   const [locationName,setLocationName] = React.useState<string>("");
   const [locations, setLocations] = React.useState<Location[]>([]); // [1]
   const [locationVisited,setLocationVisited] = React.useState<boolean[]>([]); // [2
-const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]); // OpenStreetMap features to choose from.
-const modal = useModal(locations);
-  useEffect(() => {
+const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]);
+const possibleVisitedLocations = useGetPossibleVisitedLocations(locations);
+const [disableModal,setDisableModel] = React.useState<boolean>(false);
+useEffect(() => {
     const locationsString = localStorage.getItem("locations");
     if (locationsString) {
       setLocations(JSON.parse(locationsString));
@@ -28,10 +30,7 @@ const modal = useModal(locations);
       setLocationVisited(JSON.parse(locationVisited));
     } 
   },[]);
-  if (modal)
-    {
-        return modal;
-    }
+  
   const addFeature = (feature: OpenStreetMapFeature)=>{
       console.log(`adding feature ${JSON.stringify(feature)} to locations`);
       const lat = feature.geometry.coordinates[1];
@@ -65,6 +64,10 @@ e.preventDefault();
     setFeatures([]);
   }
   console.log(`api features: ${JSON.stringify(features)}`)
+  if (possibleVisitedLocations.length > 0 && !disableModal)
+    return (
+<Modal locations={possibleVisitedLocations} onClose={() =>setDisableModel(true)} />
+    );
   return (
  <div className="container">
         <h1>Travel Bucket List</h1>
