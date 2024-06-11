@@ -18,7 +18,7 @@ export default function App()
   const [locations, setLocations] = React.useState<Location[]>([]); // [1]
   const [locationVisited,setLocationVisited] = React.useState<boolean[]>([]); // [2
 const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]);
-const possibleVisitedLocations = useGetPossibleVisitedLocations(locations);
+const {calculating,possibleVisited,error} = useGetPossibleVisitedLocations(locations);
 const [disableModal,setDisableModel] = React.useState<boolean>(false);
 useEffect(() => {
     const locationsString = localStorage.getItem("locations");
@@ -71,9 +71,12 @@ e.preventDefault();
     const newLocationVisited = locations.map((location) => visitedLocations.some((visitedLocation) => visitedLocation.name === location.name));
     setLocationVisited(newLocationVisited);
 };
-  if (possibleVisitedLocations.length > 0 && !disableModal)
-    return (
-<Modal locations={possibleVisitedLocations} onClose={() =>setDisableModel(true)} onConfirm={handleModalConfirm}/>
+  if (!calculating)
+    if (error)
+        console.error(error);
+    else if (!disableModal && possibleVisited.length > 0)
+        return (
+<Modal locations={possibleVisited!} onClose={() =>setDisableModel(true)} onConfirm={handleModalConfirm}/>
     );
   return (
  <div className="container">
