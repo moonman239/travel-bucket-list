@@ -5,23 +5,33 @@ import { Marker } from "react-leaflet";
 import { Popup,TileLayer } from "react-leaflet";
 import "./App.css";
 import './leafletIcons';  // Ensure this import is correct
+import Location from "./Location";
+import useModal from "./Modal";
 type OpenStreetMapFeature = {type: 'Feature',geometry:{type:'Point',coordinates:[number,number]},properties:{geocoding:{name?:string,label:string}}};
 type OpenStreetMapResponse = {features: OpenStreetMapFeature[]};
+
 export default function App()
 {
   const [locationName,setLocationName] = React.useState<string>("");
-  const [locations, setLocations] = React.useState<{name?: string,label:string,latitude:number,longitude:number}[]>([]); // [1]
+  const [locations, setLocations] = React.useState<Location[]>([]); // [1]
   const [locationVisited,setLocationVisited] = React.useState<boolean[]>([]); // [2
+const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]); // OpenStreetMap features to choose from.
+const modal = useModal(locations);
   useEffect(() => {
-    const locations = localStorage.getItem("locations");
-    if (locations) {
-      setLocations(JSON.parse(locations));
+    const locationsString = localStorage.getItem("locations");
+    if (locationsString) {
+      setLocations(JSON.parse(locationsString));
     }
     const locationVisited = localStorage.getItem("locationVisited");
+    
     if (locationVisited) {
       setLocationVisited(JSON.parse(locationVisited));
-    }  
+    } 
   },[]);
+  if (modal)
+    {
+        return modal;
+    }
   const addFeature = (feature: OpenStreetMapFeature)=>{
       console.log(`adding feature ${JSON.stringify(feature)} to locations`);
       const lat = feature.geometry.coordinates[1];
@@ -54,7 +64,6 @@ e.preventDefault();
     addFeature(feature);
     setFeatures([]);
   }
-  const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]); // OpenStreetMap features to choose from.
   console.log(`api features: ${JSON.stringify(features)}`)
   return (
  <div className="container">
