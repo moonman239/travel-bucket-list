@@ -27,8 +27,10 @@ export default function App()
       const lat = feature.geometry.coordinates[1];
       const lon = feature.geometry.coordinates[0];
       console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-      setLocations([...locations, {label: feature.properties.geocoding.label, name: feature.properties.geocoding.name, latitude: lat, longitude: lon}]);
-    localStorage.setItem("locations", JSON.stringify(locations));
+      const newLocations = [...locations, {label: feature.properties.geocoding.label, name: feature.properties.geocoding.name, latitude: lat, longitude: lon}];
+    localStorage.setItem("locations", JSON.stringify(newLocations));
+
+      setLocations(newLocations);
   }
   const handleSubmit = async (e: React.FormEvent) => {
 e.preventDefault();
@@ -56,6 +58,7 @@ e.preventDefault();
   }
   const [features,setFeatures] = React.useState<OpenStreetMapFeature[]>([]); // OpenStreetMap features to choose from.
   console.log(`api features: ${JSON.stringify(features)}`)
+  console.log(`locations: ${JSON.stringify(locations)}`)
   return (
  <div className="container">
         <h1>Travel Bucket List</h1>
